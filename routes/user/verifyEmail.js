@@ -9,8 +9,10 @@ module.exports= async (req,res)=>{
             },
         },
         {new: true});
-        console.log(verifiedUser)
-        res.status(200).json({status: true , data: verifiedUser})
+        if (!verifiedUser) {
+            return res.status(401).json({ status: false, message: "Wrong data" });
+          }
+        res.status(200).json({status: true , message: "Your account is verified" })
     } catch (error) {
         if (error) throw error
         res.status(401).json({status: false , error})

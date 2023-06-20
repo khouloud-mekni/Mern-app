@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
+const User = require("../models/User")
 const SECRETKEY = process.env.SECRETKEY;
 module.exports = async (req, res, next) => {
   try {
@@ -11,8 +12,14 @@ module.exports = async (req, res, next) => {
     }
     let verfiedToken = jwt.verify(token, SECRETKEY);
     // add key to the object
-    req.auth = verfiedToken;
-    //  console.log(verfiedToken)
+      req.auth = verfiedToken;
+      
+    // const user = await User.findById()
+
+    // console.log("user verifiedtoken",user)
+    //  if (verfiedToken.id !== user) {
+    //   return res.status(400).json({tokenNotMatched: true , message: "Invalid Token"  })
+    //  }
      next();
   } catch (error) {
     if (error.message) {

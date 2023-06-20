@@ -22,7 +22,7 @@ module.exports = async(req, res)=>{
         let existedUser  = await User.find({ $or: [ { email }, { userName }]})
         if(existedUser .length !== 0 ){
             return res.status(401).json({status: false 
-                , msg:"User is already exist , Please try another Email or User Name"
+                ,  existedEmailError:" User is already exist, Please try another Email or UserName"
             })
         }
         const salt = await bcrypt.genSalt(10);
@@ -50,7 +50,7 @@ module.exports = async(req, res)=>{
     </h1>
     <h2 style="color: #9932cc">Your acount has been created successfully</h2>
     <h4>One more step, please click the link below to verify your email</h4>
-    <a href="http://localhost:5000/api/user/verifyEmail?email=${email}" target="_blank">Verify your account</a>
+    <a href="http://localhost:3000/verify-email" target="_blank">Verify your account</a>
   </body>
 </html>
 `;

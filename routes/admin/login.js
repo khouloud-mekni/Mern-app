@@ -17,7 +17,7 @@ module.exports = async (req, res) => {
     if (!verifyPwd) {
       return res.status(401).json({
         status: false,
-        error: "invalid email or password",
+        error: "invalid email or password, please try again",
       });
     }
     delete user.password;
