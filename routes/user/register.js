@@ -7,7 +7,7 @@ const ADMIN_EMAIL = process.env.ADMIN_EMAIL;
 const ADMIN_PWD = process.env.ADMIN_PWD;
 module.exports = async(req, res)=>{
     try {
-        let {userName, email, password,confirm_password , userImg} = req.body
+        let {userName, email, password,confirm_password} = req.body
         
         // console.log(existedUser )
 
@@ -31,7 +31,7 @@ module.exports = async(req, res)=>{
           userName,
           email,
           password:hashedPassword ,
-          userImg,
+          
         });
         const user = await newUser.save()
         const output = `

@@ -4,18 +4,17 @@ import { IoMdCloseCircle } from "react-icons/io";
 import { Button, Icon, Loader } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-function VerifyEmail() {
-  const email = localStorage.getItem("userEmail");
+function VerifyEmailAuthor() {
+  const email = localStorage.getItem("authorEmail");
   const [loading, setLoading] = useState(true);
   const [verify, setVerify] = useState();
   const handleLocalStorage = () => {
-    localStorage.removeItem("userEmail");
-    localStorage.setItem("checkBox", "user");
-
+    localStorage.removeItem("authorEmail");
+    localStorage.setItem("checkBox", "author");
   };
   useEffect(() => {
     axios
-      .put(`/api/user/verifyEmail?email=${email}`)
+      .put(`/api/author/verifyEmail?email=${email}`)
       .then((res) => {
         console.log(res);
         if (res.data.status) {
@@ -42,7 +41,7 @@ function VerifyEmail() {
       ) : (
         <>
           {verify ? (
-            <div className="bg-[#86efac] min-h-[694px] flex items-center justify-center">
+            <div className="bg-[#34d399] min-h-[694px] flex items-center justify-center">
               <div className="flex flex-col items-center mx-auto w-[80%]">
                 <MdVerifiedUser size={80} />
                 <h1 className="text-2xl font-Popins text-bold">
@@ -62,7 +61,7 @@ function VerifyEmail() {
               </div>
             </div>
           ) : (
-            <div className="bg-[#f87171] min-h-[694px] flex items-center justify-center">
+            <div className="bg-[#34d399] min-h-[694px] flex items-center justify-center">
               <div className="flex flex-col items-center mx-auto w-[80%]">
                 <IoMdCloseCircle size={80} />
                 <h1 className="text-2xl font-Popins text-bold">
@@ -88,4 +87,4 @@ function VerifyEmail() {
   );
 }
 
-export default VerifyEmail;
+export default VerifyEmailAuthor;

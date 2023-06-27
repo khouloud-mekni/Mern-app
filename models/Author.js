@@ -18,6 +18,8 @@ const authorSchema = new mongoose.Schema(
     },
     authImg: {
       type: String,
+      default:
+        "https://res.cloudinary.com/dw2xvijiu/image/upload/v1687356917/uploads/u5k4j4qfru81n5lf1y0r.png" ,
     },
     isAuthor: {
       type: Boolean,

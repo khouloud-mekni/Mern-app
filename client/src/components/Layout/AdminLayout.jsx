@@ -9,8 +9,8 @@ function AdminLayout() {
     <div className="min-w-full min-h-[694px] ">
       <AdminNavbar/>
       <div className='box-border border-2 min-h-[600px] flex'>
-      <AdminRoute>
       <Aside/>
+      <AdminRoute>
       <Outlet/>
       </AdminRoute>
       </div>

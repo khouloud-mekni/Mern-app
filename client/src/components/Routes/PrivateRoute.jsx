@@ -1,7 +1,6 @@
-import React from 'react'
-import { Navigate } from 'react-router';
-
-function PrivateRoute({children}) {
+import React from "react";
+import { Navigate } from "react-router";
+function PrivateRoute({ children }) {
   const token = localStorage.getItem("token");
   const isBanned = localStorage.getItem("isBanned");
   const isVerified = localStorage.getItem("isVerified");
@@ -23,12 +22,11 @@ function PrivateRoute({children}) {
       isBanned === "false" &&
       isVerified === "true" &&
       isAdmin === "true")
-  ){
+  ) {
     return children;
-  }else{
-    return <Navigate to={'/login'}/>
+  } else {
+    return <Navigate to="/login" />;
   }
-  
 }
 
-export default PrivateRoute
+export default PrivateRoute;

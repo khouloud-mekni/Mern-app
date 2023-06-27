@@ -1,11 +1,11 @@
-const Book = require("../../models/Book");
+const User = require("../../models/User");
 module.exports = async (req, res) => {
   try {
-    let { id } = req.auth;
-    const books = await Book.find({ author: id });
+    let { user } = req.query;
+    const userr = await User.findById(user).select({ password: 0, email: 0 });
     res.status(200).json({
       status: true,
-      data: books,
+      data: userr,
     });
   } catch (error) {
     if (error) throw error;

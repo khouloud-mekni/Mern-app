@@ -1,33 +1,72 @@
-
 import React, { useState } from "react";
-import {Button,Divider,Form,Grid,Segment,Icon,Checkbox,Message,} from "semantic-ui-react";
+import {
+  Button,
+  Divider,
+  Form,
+  Grid,
+  Segment,
+  Icon,
+  Checkbox,
+  Message,
+} from "semantic-ui-react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 function Login() {
+  let check = localStorage.getItem("checkBox");
+  if (!check) {
+    check = "user";
+  }
   const navigate = useNavigate();
-  const [value, setValue] = useState("user");
+  const [value, setValue] = useState(check);
   const [errorMsg, setErrorMsg] = useState("");
   const [user, setUser] = useState({});
-  console.log(user);
+  const [author, setAuthor] = useState();
   const handleChange = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
+  };
+  const handleAuthorChange = (e) => {
+    setAuthor({ ...author, [e.target.name]: e.target.value });
   };
   const handleUserLogin = () => {
     axios
       .post("/api/user/login", user)
       .then((res) => {
-        console.log(res);
-        if (res.data.status) {
+        console.log("login res", res);
+        if (res.data.data.isBanned) {
+          alert("you are banned");
+        } else if (res.data.status) {
           localStorage.setItem("id", res.data.data.id);
           localStorage.setItem("token", res.data.data.token);
           localStorage.setItem("isBanned", res.data.data.isBanned);
           localStorage.setItem("isVerified", res.data.data.isVerified);
           localStorage.setItem("isUser", res.data.data.isUser);
           localStorage.setItem("isAdmin", res.data.data.isAdmin);
-          navigate("/book");
+          navigate("/user-profile");
         }
       })
       .catch((err) => {
+        if (err) {
+          setErrorMsg(err.response.data.error);
+        }
+      });
+  };
+  const handleAuthorLogin = () => {
+    axios
+      .post("/api/author/login", author)
+      .then((res) => {
+        if (res.data.status) {
+          localStorage.clear();
+          localStorage.setItem("id", res.data.data.id);
+          localStorage.setItem("token", res.data.data.token);
+          localStorage.setItem("isBanned", res.data.data.isBanned);
+          localStorage.setItem("isVerified", res.data.data.isVerified);
+          localStorage.setItem("isAuthor", res.data.data.isAuthor);
+          localStorage.setItem("isAdmin", res.data.data.isAdmin);
+          navigate("/author-profile");
+        }
+      })
+      .catch((err) => {
+        console.dir(err);
         if (err) {
           setErrorMsg(err.response.data.error);
         }
@@ -101,21 +140,40 @@ function Login() {
             ) : (
               <>
                 <Message header="Login as an author" />
-                <Form>
+                <Form
+                  onChange={(e) => {
+                    handleAuthorChange(e);
+                  }}
+                >
                   <Form.Input
-                    icon="user"
+                    icon="mail"
+                    type="email"
                     iconPosition="left"
-                    label="Username"
+                    label="Email"
                     placeholder="Username"
+                    name="email"
                   />
                   <Form.Input
                     icon="lock"
                     iconPosition="left"
                     label="Password"
                     type="password"
+                    name="password"
                   />
-                  <Button content="Login" primary />
+                  <Button
+                    content="Login"
+                    primary
+                    onClick={() => {
+                      handleAuthorLogin();
+                    }}
+                  />
                 </Form>
+                {errorMsg && (
+                  <Message negative>
+                    <Message.Header>{errorMsg}</Message.Header>
+                    {hideMsg()}
+                  </Message>
+                )}
               </>
             )}
           </Grid.Column>
@@ -134,95 +192,4 @@ function Login() {
   );
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// import React from 'react'
-// import { Button, Divider, Form, Grid, Segment } from 'semantic-ui-react' 
-// function Login() {
-//   return (
-//     <div className="w-[70%] mx-auto">
-//     <Segment placeholder>
-//     <Grid columns={2} relaxed='very' stackable>
-//     <Grid.Column>
-//     <Form>
-//     <Form.Input
-//     icon='user'
-//     iconPosition='left'
-//     label='Username'
-//     placeholder='Username'
-//     />
-//           <Form.Input
-//             icon='lock'
-//             iconPosition='left'
-//             label='Password'
-//             type='password'
-//           />
-          
-//           <Button content='Login' primary />
-//           </Form>
-//       </Grid.Column>
-      
-//       <Grid.Column verticalAlign='middle'>
-//       <Button content='Register' icon='signup' size='big' />
-//       </Grid.Column>
-//       </Grid>
-      
-//       <Divider vertical>Or</Divider>
-//       </Segment>
-//       </div>
-//       )
-// }
-
-export default Login
+export default Login;

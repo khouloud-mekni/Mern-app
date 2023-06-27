@@ -1,11 +1,11 @@
-import React from 'react'
+import React from "react";
 
-function AdminDashbord() {
+function AdminDashboard() {
   return (
-    <div className='box-border p-[25px] w-[75%]'>
-    <h1> Here is the Admin Dashbord </h1>
+    <div className="box-border p-[25px] w-[80%]">
+      <h1>This is the admin dashboard</h1>
     </div>
-  )
+  );
 }
 
-export default AdminDashbord
+export default AdminDashboard;

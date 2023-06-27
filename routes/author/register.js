@@ -5,17 +5,22 @@ const AuthorValidation  = require("../../utils/AuthorValidation");
 require("dotenv").config();
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL;
 const ADMIN_PWD = process.env.ADMIN_PWD;
+const fs = require("fs");
 module.exports = async (req, res) => {
   try {
-    let { email, password, fullName, bio, confirm_password } = req.body;
+    let { email, password, fullName, bio, confirm_password } = req.body
 
+
+    
     let { error } = await AuthorValidation({
       email,
       password,
       confirm_password,
       fullName,
       bio,
+      
     });
+
     if (error) {
       return res
         .status(401)
@@ -39,6 +44,7 @@ module.exports = async (req, res) => {
       password: hashedPassword,
       fullName,
       bio,
+    
     });
     const author = await newAuthor.save();
     const transporter = nodemailer.createTransport({

@@ -17,11 +17,13 @@ function Register() {
   const [value, setValue] = useState("user");
   const [user, setUser] = useState({});
   const [error, setError] = useState("");
-  const [existedEmailError, setExistedEmailError] = useState("");
+  // const [existedEmailError, setExistedEmailError] = useState("");
   const [author, setAuthor] = useState({});
-
   const handleChange = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
+  };
+  const handlAuthorChange = (e) => {
+    setAuthor({ ...author, [e.target.name]: e.target.value });
   };
   const handleUserRegister = () => {
     axios
@@ -37,7 +39,7 @@ function Register() {
             }
           ).then((value) => {
             navigate("/login");
-            localStorage.setItem("email", user.email + "a");
+            localStorage.setItem("userEmail", user.email);
           });
         }
       })
@@ -45,7 +47,45 @@ function Register() {
         if (err.response.data.error) {
           setError(err.response.data.error);
         } else if (err.response.data.existedEmailError) {
-          setExistedEmailError(err.response.data.existedEmailError);
+          // setExistedEmailError(err.response.data.existedEmailError);
+          toast.error(err.response.data.existedEmailError, {
+            position: "top-center",
+            autoClose: 6000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          });
+        }
+      });
+  };
+  const handleAuthorRegister = () => {
+    axios
+      .post("/api/author/register", author)
+      .then((res) => {
+        if (res) {
+          console.log(res);
+          swal(
+            "Good job!",
+            res.data.message,
+            "success",
+            {
+              button: "Continue",
+            }
+          ).then((value) => {
+            navigate("/login");
+            localStorage.setItem("authorEmail", author.email);
+          });
+        }
+      })
+      .catch((err) => {
+        console.dir(err);
+        if (err.response.data.error) {
+          setError(err.response.data.error);
+        } else if (err.response.data.existedEmailError) {
+          // setExistedEmailError(err.response.data.existedEmailError);
           toast.error(err.response.data.existedEmailError, {
             position: "top-center",
             autoClose: 6000,
@@ -94,7 +134,7 @@ function Register() {
                 >
                   <Form.Input
                     error={
-                      error.includes("username")
+                      error.toLowerCase().includes("username")
                         ? {
                             content: error,
                             pointing: "below",
@@ -109,7 +149,7 @@ function Register() {
                   />
                   <Form.Input
                     error={
-                      error.includes("email")
+                      error.toLowerCase().includes("email")
                         ? {
                             content: error,
                             pointing: "below",
@@ -167,6 +207,7 @@ function Register() {
               </>
             ) : (
               <>
+                {/* Author REGISTER */}
                 <Form.Field>
                   <Checkbox
                     radio
@@ -187,38 +228,93 @@ function Register() {
                     onChange={(e, data) => setValue(data.value)}
                   />
                 </Form.Field>
-                <Form>
+                <Form
+                  onChange={(e) => {
+                    handlAuthorChange(e);
+                  }}
+                >
                   <Form.Input
                     icon="user"
                     iconPosition="left"
                     label="Full Name"
                     placeholder="Fullame"
+                    name="fullName"
+                    error={
+                      error.toLowerCase().includes("fullname")
+                        ? {
+                            content: error,
+                            pointing: "below",
+                          }
+                        : null
+                    }
                   />
                   <Form.Input
                     icon="mail"
                     iconPosition="left"
                     label="Email"
                     placeholder="Email"
+                    name="email"
+                    error={
+                      error.includes("email")
+                        ? {
+                            content: error,
+                            pointing: "below",
+                          }
+                        : null
+                    }
                   />
                   <Form.Input
                     icon="lock"
                     iconPosition="left"
                     label="Password"
                     type="password"
+                    name="password"
+                    error={
+                      error.toLowerCase().includes("password")
+                        ? {
+                            content: error,
+                            pointing: "below",
+                          }
+                        : null
+                    }
                   />
                   <Form.Input
                     icon="lock"
                     iconPosition="left"
                     label="Confirm Password"
-                    type="confirm password"
+                    type="password"
+                    name="confirm_password"
+                    error={
+                      error.toLowerCase().includes("confirm")
+                        ? {
+                            content: error,
+                            pointing: "below",
+                          }
+                        : null
+                    }
                   />
                   <Form.Input
                     icon="user"
                     iconPosition="left"
                     label="A short Biography"
                     placeholder="Resume"
+                    name="bio"
+                    error={
+                      error.toLowerCase().includes("bio")
+                        ? {
+                            content: error,
+                            pointing: "below",
+                          }
+                        : null
+                    }
                   />
-                  <Button content="Login" primary />
+                  <Button
+                    content="Register"
+                    primary
+                    onClick={() => {
+                      handleAuthorRegister();
+                    }}
+                  />
                 </Form>
               </>
             )}
@@ -252,5 +348,4 @@ function Register() {
   );
 }
 
-
-export default Register
+export default Register;
